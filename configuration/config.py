@@ -1,0 +1,1 @@
+DB_CSV_PATH = r"C:\Users\amitk\PycharmProjects\fastapi_example\db\store_items.csv" #r"C:\Users\amitk\Desktop\store_db.csv"
