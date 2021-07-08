@@ -1,8 +1,8 @@
 import uvicorn
 
-from fastapi import FastAPI, HTTPException, status
+from fastapi import FastAPI, HTTPException
 from db.store_csv_database import StoreCSVDatabase
-from models.schemas import Product
+from store.models import Product
 from configuration.config import DB_CSV_PATH
 
 app = FastAPI()
@@ -33,29 +33,23 @@ def get_all():
 
 @app.post('/store/insert')
 def insert(product: Product):
-    # todo: if product already exists raise error
+    if db.get(product.name) is not None:
+        raise HTTPException(status_code=400, detail="product can't be inserted since it already exists")
     db.insert(product)
     return {'data': f"Product {product.name} was inserted successfully"}
 
 
 @app.put('/store/update')
 def update(product: Product):
-    # if does not exist return error
+    if db.get(product.name) is None:
+        raise HTTPException(status_code=400, detail="product can't be updated since it does not exist")
     db.update(product)
     return {"data": f"Product {product.name} was updated successfully"}
 
 
 @app.delete('/store/remove/{product_name}')
 def remove(product_name: str):
+    if db.get(product_name) is None:
+        raise HTTPException(status_code=400, detail="product can't be removed since it does not exist")
     db.remove(product_name)
     return {'data': f"Product {product_name} was removed successfully"}
-
-
-# @app.get('/blog')
-# def blog(blog_obj: Blog):
-#     return {"data": {"blog_title": blog_obj.title, "blog_body": blog_obj.body}}
-#     # return blog_obj
-
-
-if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8000)

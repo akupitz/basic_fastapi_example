@@ -1,5 +1,5 @@
 import pandas as pd
-from models.schemas import Product
+from store.models import Product
 from db.generic_database import GenericDatabase
 
 
