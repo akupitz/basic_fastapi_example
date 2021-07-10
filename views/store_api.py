@@ -1,6 +1,6 @@
 from main import app, db
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Path
 # from fastapi import FastAPI, HTTPException
 from db.store_csv_database import StoreCSVDatabase
 from store.models import Product
@@ -12,12 +12,12 @@ from configuration.config import DB_CSV_PATH
 
 # localhost/docs will give us the swagger
 # localhost/redoc will give us the swagger validations
-@app.get('/')
+@app.get('/', status_code=200)
 def home():
     return "Store home page, go to /docs"
 
 
-@app.get('/store/get/{product_name}')
+@app.get('/store/get/{product_name}', status_code=200)
 def get(product_name: str):
     product_info = db.get(product_name)
     if product_info is None:
@@ -26,13 +26,13 @@ def get(product_name: str):
         return {'data': product_info}
 
 
-@app.get('/store/get_all')
+@app.get('/store/get_all', status_code=200)
 def get_all():
     all_products_info = db.get_all()
     return {'data': all_products_info}
 
 
-@app.post('/store/insert')
+@app.post('/store/insert', status_code=201)
 def insert(product: Product):
     if db.get(product.name) is not None:
         raise HTTPException(status_code=400, detail="product can't be inserted since it already exists")
@@ -40,7 +40,7 @@ def insert(product: Product):
     return {'data': f"Product {product.name} was inserted successfully"}
 
 
-@app.put('/store/update')
+@app.put('/store/update', status_code=201)
 def update(product: Product):
     if db.get(product.name) is None:
         raise HTTPException(status_code=400, detail="product can't be updated since it does not exist")
