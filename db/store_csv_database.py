@@ -12,6 +12,9 @@ class StoreCSVDatabase(GenericDatabase):
         self._db_dataframe = updated_db
         self._db_dataframe.to_csv(self._db_path, index=False)
 
+    def _get_dataframe(self):
+        return self._db_dataframe
+
     @staticmethod
     def _product_details_to_df(product: Product):
         return pd.DataFrame({'name': product.name, 'amount': product.amount, 'price': product.price}, index=[0])

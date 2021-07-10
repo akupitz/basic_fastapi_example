@@ -1,12 +1,13 @@
-import uvicorn
+from main import app, db
 
-from fastapi import FastAPI, HTTPException
+from fastapi import HTTPException
+# from fastapi import FastAPI, HTTPException
 from db.store_csv_database import StoreCSVDatabase
 from store.models import Product
 from configuration.config import DB_CSV_PATH
 
-app = FastAPI()
-db = StoreCSVDatabase(DB_CSV_PATH)
+# app = FastAPI()
+# db = StoreCSVDatabase(DB_CSV_PATH)
 
 
 # localhost/docs will give us the swagger
